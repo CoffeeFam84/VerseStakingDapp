@@ -14,13 +14,13 @@ import { getImg } from "../../hook/Helper";
 import styles from './Home.module.sass';
 import axios from 'axios'
 import { CustomButton } from "../../components/CustomButton";
-import CrocosFarmCont from "../../ABI/CrocosFarm.json";
-import CrocosNFTCont from "../../ABI/CrocosNFT.json";
-const CrocosFarmAddr = "0x6aa6D5447e4f904Eca62F45cDD1C01aE1dc05f02";
-const CrocosNFTAddr = "0x18b73D1f9e2d97057deC3f8D6ea9e30FCADB54D7";
+import VerseStakingcontract from "../../ABI/VerseStaking.json";
+import VerseNFTContract from "../../ABI/VerseNFT.json";
+const VerseStakingAddr = "0xA83359e857ECe0dba1Dd15310A6E20ce136f1320";
+const VerseNFTAddr = "0xc9fef8721736347dB73ceA92D0d5b47C8D4fb0b0";
 let myAddr = "";
-const netchainId = 25;
-const netchainIdHex = '0x19';
+const netchainId = 97;
+const netchainIdHex = '0x61';
 
 const style = {
     position: 'absolute',
@@ -87,17 +87,17 @@ export const CardObj = () => {
                     const provider = new ethers.providers.Web3Provider(connection);
                     const signer = provider.getSigner();
                     farmContract = new ethers.Contract(
-                        CrocosFarmAddr,
-                        CrocosFarmCont.abi,
+                        VerseStakingAddr,
+                        VerseStakingcontract.abi,
                         signer
                     );
                     nftContract = new ethers.Contract(
-                        CrocosNFTAddr,
-                        CrocosNFTCont.abi,
+                        VerseNFTAddr,
+                        VerseNFTContract.abi,
                         signer
                     );
                     if (stakeState === true) {
-                        const nftCon = await nftContract.setApprovalForAll(CrocosFarmAddr, 1);
+                        const nftCon = await nftContract.setApprovalForAll(VerseStakingAddr, 1);
                         await nftCon.wait();
                         const farmCon = await farmContract.batchStake(selectedNFT);
                         await farmCon.wait();
@@ -139,13 +139,13 @@ export const CardObj = () => {
                 myAddr = signer.provider.provider.selectedAddress;
                 // console.log(myAddr)
                 farmContract = new ethers.Contract(
-                    CrocosFarmAddr,
-                    CrocosFarmCont.abi,
+                    VerseStakingAddr,
+                    VerseStakingcontract.abi,
                     signer
                 );
                 if (chainId === netchainId) {
 
-                    const reward = (await farmContract.getTotalClaimable(myAddr) / Math.pow(10, 18)).toString().slice(0, 7);
+                    const reward = (await farmContract.getTotalClaimable(myAddr) / Math.pow(10, 9)).toString().slice(0, 7);
                     setHarvest(reward);
 
                 } else {
@@ -181,8 +181,8 @@ export const CardObj = () => {
                 myAddr = signer.provider.provider.selectedAddress;
                 console.log(myAddr)
                 nftContract = new ethers.Contract(
-                    CrocosNFTAddr,
-                    CrocosNFTCont.abi,
+                    VerseNFTAddr,
+                    VerseNFTContract.abi,
                     provider
                 );
                 // const balance = await nftContract.balanceOf(myAddr);
@@ -229,8 +229,8 @@ export const CardObj = () => {
                 myAddr = signer.provider.provider.selectedAddress;
                 console.log(myAddr)
                 farmContract = new ethers.Contract(
-                    CrocosFarmAddr,
-                    CrocosFarmCont.abi,
+                    VerseStakingAddr,
+                    VerseStakingcontract.abi,
                     signer
                 )
                 if (harvest > 0) {
@@ -272,13 +272,13 @@ export const CardObj = () => {
                 myAddr = signer.provider.provider.selectedAddress;
                 console.log(myAddr)
                 farmContract = new ethers.Contract(
-                    CrocosFarmAddr,
-                    CrocosFarmCont.abi,
+                    VerseStakingAddr,
+                    VerseStakingcontract.abi,
                     signer
                 );
                 nftContract = new ethers.Contract(
-                    CrocosNFTAddr,
-                    CrocosNFTCont.abi,
+                    VerseNFTAddr,
+                    VerseNFTContract.abi,
                     signer
                 );
                 const stakeOfOwner = await farmContract.stakeOfOwner(myAddr);
@@ -312,12 +312,12 @@ export const CardObj = () => {
     return (
         <div>
             <div className={styles.card}>
-                <div className={styles.title}>Stake NFT get CROCOS 100% APR</div>
+                <div className={styles.title}>Stake NFT get AVERSE 100% APR</div>
                 <img src={getImg('home/nft.png')} alt="nft" />
                 <CustomButton value="Pick NFT" onClick={onClickPick} />
                 <div className={styles.box}>
                     <h5>Reward</h5>
-                    <p>{harvest} CROCOS</p>
+                    <p>{harvest} AVERSE</p>
                     <CustomButton value="Harvest" onClick={onClickHarvest} />
                 </div>
                 <CustomButton value="Withdraw" onClick={onClickWithdraw} />
